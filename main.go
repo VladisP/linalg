@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Scalar product test
-	fmt.Println("Scalar product test")
+	fmt.Println(" ---------- Scalar product test ---------- ")
 
 	v1 := vector.NewVector([]float64{1, 2, 3})
 	v2 := vector.NewVector([]float64{4, 5, 6})
@@ -22,7 +22,7 @@ func main() {
 	fmt.Println()
 
 	// Matrix mul test
-	fmt.Println("Matrix mul test")
+	fmt.Println(" ---------- Matrix mul test ---------- ")
 
 	m1, _ := matrix.NewMatrix([][]float64{
 		{1, 2},
@@ -45,7 +45,7 @@ func main() {
 	fmt.Println()
 
 	// Matrix * Vector test
-	fmt.Println("Matrix * Vector test")
+	fmt.Println(" ---------- Matrix * Vector test ---------- ")
 
 	v, err := m2.MulVector(v2)
 	fmt.Printf("m2 * v2 = %s\n", v)
@@ -53,7 +53,7 @@ func main() {
 	fmt.Println()
 
 	// Triangular test
-	fmt.Println("Triangular test")
+	fmt.Println(" ---------- Triangular test ---------- ")
 
 	testMatrix, _ := matrix.NewMatrix([][]float64{
 		{1, 2, 3},
@@ -70,7 +70,7 @@ func main() {
 	fmt.Println(err)
 
 	// Substitution test
-	fmt.Println("Substitution test")
+	fmt.Println(" ---------- Substitution test ---------- ")
 
 	res, err := gauss.Substitution(a, f)
 	fmt.Println(res)

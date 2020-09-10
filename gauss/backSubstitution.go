@@ -16,6 +16,9 @@ func Substitution(a *matrix.Matrix, f *vector.Vector) (*vector.Vector, error) {
 	if !isTriangle(a) {
 		return nil, fmt.Errorf(ErrorTriangleMatrix)
 	}
+	if nullDiagonal(a) {
+		return nil, fmt.Errorf(ErrorNullDiagonal)
+	}
 
 	res := make([]float64, f.Size)
 
@@ -30,16 +33,4 @@ func Substitution(a *matrix.Matrix, f *vector.Vector) (*vector.Vector, error) {
 	}
 
 	return vector.NewVector(res), nil
-}
-
-func isTriangle(m *matrix.Matrix) bool {
-	for i := 1; i < m.RowCount; i++ {
-		for j := 0; j < i; j++ {
-			if m.Value[i][j] != 0 {
-				return false
-			}
-		}
-	}
-
-	return true
 }
