@@ -68,11 +68,34 @@ func main() {
 	fmt.Println(a)
 	fmt.Println(f)
 	fmt.Println(err)
+	fmt.Println()
 
 	// Substitution test
 	fmt.Println(" ---------- Substitution test ---------- ")
 
 	res, err := gauss.Substitution(a, f)
 	fmt.Println(res)
+	fmt.Println(err)
+	fmt.Println()
+
+	// Second gauss test
+	fmt.Println(" ---------- Second gauss test ---------- ")
+
+	testMatrix2, _ := matrix.NewMatrix([][]float64{
+		{2, 4, 1},
+		{5, 2, 1},
+		{2, 3, 4},
+	})
+	testVector2 := vector.NewVector([]float64{36, 47, 37})
+
+	a2, f2, err := gauss.TriangularMatrix(testMatrix2, testVector2)
+	fmt.Println(testMatrix2)
+	fmt.Println(testVector2)
+	fmt.Println(a2)
+	fmt.Println(f2)
+	fmt.Println(err)
+
+	res2, err := gauss.Substitution(a2, f2)
+	fmt.Println(res2)
 	fmt.Println(err)
 }
