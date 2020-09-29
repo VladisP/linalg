@@ -2,6 +2,7 @@ package vector
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -29,6 +30,26 @@ func (v *Vector) ScalarProd(vector *Vector) (float64, error) {
 	}
 
 	return res, nil
+}
+
+func (v *Vector) Sub(vector *Vector) (*Vector, error) {
+	if !equalSize(v, vector) {
+		return nil, fmt.Errorf(ErrorDimensions)
+	}
+
+	value := make([]float64, len(v.Value))
+
+	for i := range v.Value {
+		value[i] = v.Value[i] - vector.Value[i]
+	}
+
+	return NewVector(value), nil
+}
+
+func (v *Vector) Norm() float64 {
+	sc, _ := v.ScalarProd(v)
+
+	return math.Sqrt(sc)
 }
 
 func (v *Vector) String() string {

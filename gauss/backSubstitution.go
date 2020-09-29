@@ -6,7 +6,7 @@ import (
 	"linalg/vector"
 )
 
-func Substitution(a *matrix.Matrix, f *vector.Vector) (*vector.Vector, error) {
+func substitution(a *matrix.Matrix, f *vector.Vector) (*vector.Vector, error) {
 	if a.RowCount != a.ColumnCount {
 		return nil, fmt.Errorf(ErrorSquareMatrix)
 	}
@@ -15,9 +15,6 @@ func Substitution(a *matrix.Matrix, f *vector.Vector) (*vector.Vector, error) {
 	}
 	if !isTriangle(a) {
 		return nil, fmt.Errorf(ErrorTriangleMatrix)
-	}
-	if nullDiagonal(a) {
-		return nil, fmt.Errorf(ErrorNullDiagonal)
 	}
 
 	res := make([]float64, f.Size)
@@ -29,7 +26,7 @@ func Substitution(a *matrix.Matrix, f *vector.Vector) (*vector.Vector, error) {
 			x -= a.Value[i][j] * res[j]
 		}
 
-		res[i] = x / a.Value[i][i]
+		res[i] = x
 	}
 
 	return vector.NewVector(res), nil
