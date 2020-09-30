@@ -24,10 +24,22 @@ func Of(v []int) Permutation {
 }
 
 func (p Permutation) Swap(i, j int) error {
-	if i >= len(p) || j >= len(p) {
+	if i < 0 || j < 0 || i >= len(p) || j >= len(p) {
 		return fmt.Errorf(ErrorIndexOutOfRange)
 	}
 	p[i], p[j] = p[j], p[i]
+	return nil
+}
+
+func (p Permutation) Compose(permutation Permutation) error {
+	if err := checkSizes(p, permutation); err != nil {
+		return err
+	}
+
+	for i := range p {
+		p[i] = permutation[p[i]]
+	}
+
 	return nil
 }
 

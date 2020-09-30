@@ -68,6 +68,55 @@ func (m *Matrix) MulVector(v *vector.Vector) (*vector.Vector, error) {
 	return vector.NewVector(res), nil
 }
 
+func (m *Matrix) IsTriangle() bool {
+	for i := 1; i < m.RowCount; i++ {
+		for j := 0; j < i; j++ {
+			if m.Value[i][j] != 0 {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func (m *Matrix) SwapColumns(i, j int) error {
+	if i < 0 || j < 0 || i >= m.ColumnCount || j >= m.ColumnCount {
+		return fmt.Errorf(ErrorSwapIndexOutOfRange)
+	}
+
+	for k := 0; k < m.RowCount; k++ {
+		m.Value[k][i], m.Value[k][j] = m.Value[k][j], m.Value[k][i]
+	}
+
+	return nil
+}
+
+func (m *Matrix) SwapRows(i, j int) error {
+	if i < 0 || j < 0 || i >= m.RowCount || j >= m.RowCount {
+		return fmt.Errorf(ErrorSwapIndexOutOfRange)
+	}
+
+	for k := 0; k < m.ColumnCount; k++ {
+		m.Value[i][k], m.Value[j][k] = m.Value[j][k], m.Value[i][k]
+	}
+
+	return nil
+}
+
+func (m *Matrix) Copy() *Matrix {
+	rows := make([][]float64, m.RowCount)
+
+	for i := 0; i < m.RowCount; i++ {
+		rows[i] = make([]float64, m.ColumnCount)
+		copy(rows[i], m.Value[i])
+	}
+
+	newMatrix, _ := NewMatrix(rows)
+
+	return newMatrix
+}
+
 func (m *Matrix) String() string {
 	s := ""
 

@@ -52,6 +52,21 @@ func (v *Vector) Norm() float64 {
 	return math.Sqrt(sc)
 }
 
+func (v *Vector) SwapComponents(i, j int) error {
+	if i < 0 || j < 0 || i >= v.Size || j >= v.Size {
+		return fmt.Errorf(ErrorIndexOutOfRange)
+	}
+	v.Value[i], v.Value[j] = v.Value[j], v.Value[i]
+	return nil
+}
+
+func (v *Vector) Copy() *Vector {
+	value := make([]float64, v.Size)
+	copy(value, v.Value)
+
+	return NewVector(value)
+}
+
 func (v *Vector) String() string {
 	s := "("
 
