@@ -32,6 +32,34 @@ func (v *Vector) ScalarProd(vector *Vector) (float64, error) {
 	return res, nil
 }
 
+func (v *Vector) Sum(vector *Vector) (*Vector, error) {
+	if !equalSize(v, vector) {
+		return nil, fmt.Errorf(ErrorDimensions)
+	}
+
+	value := make([]float64, v.Size)
+
+	for i := range value {
+		value[i] = v.Value[i] + vector.Value[i]
+	}
+
+	return NewVector(value), nil
+}
+
+func (v *Vector) UniformNorm() float64 {
+	norm := math.Abs(v.Value[0])
+
+	for i := 1; i < v.Size; i++ {
+		x := math.Abs(v.Value[i])
+
+		if x > norm {
+			norm = x
+		}
+	}
+
+	return norm
+}
+
 func (v *Vector) Sub(vector *Vector) (*Vector, error) {
 	if !equalSize(v, vector) {
 		return nil, fmt.Errorf(ErrorDimensions)
@@ -50,6 +78,21 @@ func (v *Vector) Norm() float64 {
 	sc, _ := v.ScalarProd(v)
 
 	return math.Sqrt(sc)
+}
+
+func (v *Vector) SwapComponents(i, j int) error {
+	if i < 0 || j < 0 || i >= v.Size || j >= v.Size {
+		return fmt.Errorf(ErrorIndexOutOfRange)
+	}
+	v.Value[i], v.Value[j] = v.Value[j], v.Value[i]
+	return nil
+}
+
+func (v *Vector) Copy() *Vector {
+	value := make([]float64, v.Size)
+	copy(value, v.Value)
+
+	return NewVector(value)
 }
 
 func (v *Vector) String() string {
