@@ -32,6 +32,34 @@ func (v *Vector) ScalarProd(vector *Vector) (float64, error) {
 	return res, nil
 }
 
+func (v *Vector) Sum(vector *Vector) (*Vector, error) {
+	if !equalSize(v, vector) {
+		return nil, fmt.Errorf(ErrorDimensions)
+	}
+
+	value := make([]float64, v.Size)
+
+	for i := range value {
+		value[i] = v.Value[i] + vector.Value[i]
+	}
+
+	return NewVector(value), nil
+}
+
+func (v *Vector) UniformNorm() float64 {
+	norm := math.Abs(v.Value[0])
+
+	for i := 1; i < v.Size; i++ {
+		x := math.Abs(v.Value[i])
+
+		if x > norm {
+			norm = x
+		}
+	}
+
+	return norm
+}
+
 func (v *Vector) Sub(vector *Vector) (*Vector, error) {
 	if !equalSize(v, vector) {
 		return nil, fmt.Errorf(ErrorDimensions)

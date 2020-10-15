@@ -3,6 +3,7 @@ package matrix
 import (
 	"fmt"
 	"linalg/vector"
+	"math"
 	"strconv"
 )
 
@@ -66,6 +67,78 @@ func (m *Matrix) MulVector(v *vector.Vector) (*vector.Vector, error) {
 	}
 
 	return vector.NewVector(res), nil
+}
+
+func (m *Matrix) Sum(matrix *Matrix) (*Matrix, error) {
+	if m.RowCount != matrix.RowCount || m.ColumnCount != matrix.ColumnCount {
+		return nil, fmt.Errorf(ErrorDimensions)
+	}
+
+	res := make([][]float64, m.RowCount)
+
+	for i := 0; i < m.RowCount; i++ {
+		res[i] = make([]float64, m.ColumnCount)
+
+		for j := 0; j < m.ColumnCount; j++ {
+			res[i][j] = m.Value[i][j] + matrix.Value[i][j]
+		}
+	}
+
+	return NewMatrix(res)
+}
+
+func (m *Matrix) Inverse2() (*Matrix, error) {
+	if m.ColumnCount != 2 || m.RowCount != 2 {
+		return nil, fmt.Errorf(ErrorMatrix2by2)
+	}
+
+	a, b, c, d := m.Value[0][0], m.Value[0][1], m.Value[1][0], m.Value[1][1]
+	factor := a*d - b*c
+
+	value := [][]float64{
+		{d / factor, -b / factor},
+		{-c / factor, a / factor},
+	}
+
+	return NewMatrix(value)
+}
+
+func (m *Matrix) ConditionNumber2() (float64, error) {
+	if m.ColumnCount != 2 || m.RowCount != 2 {
+		return 0, fmt.Errorf(ErrorMatrix2by2)
+	}
+	i, _ := m.Inverse2()
+	return i.UniformNorm() * m.UniformNorm(), nil
+}
+
+func (m *Matrix) UniformNorm() float64 {
+	norm := math.Abs(m.Value[0][0])
+
+	for i := 0; i < m.RowCount; i++ {
+		sum := float64(0)
+
+		for j := 0; j < m.ColumnCount; j++ {
+			sum += math.Abs(m.Value[i][j])
+		}
+
+		if sum > norm {
+			norm = sum
+		}
+	}
+
+	return norm
+}
+
+func (m *Matrix) Norm() float64 {
+	res := float64(0)
+
+	for i := 0; i < m.RowCount; i++ {
+		for j := 0; j < m.ColumnCount; j++ {
+			res += m.Value[i][j] * m.Value[i][j]
+		}
+	}
+
+	return math.Sqrt(res)
 }
 
 func (m *Matrix) IsTriangle() bool {
