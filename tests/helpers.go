@@ -27,7 +27,7 @@ func fillDominanceMatrix(n int) (*matrix.Matrix, error) {
 	}
 
 	for i := 0; i < m.RowCount; i++ {
-		m.Value[i][i] = sum(m.Value[i])
+		m.Value[i][i] = sum(m.Value[i]) * 100
 	}
 
 	return m, nil

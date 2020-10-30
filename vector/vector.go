@@ -18,6 +18,26 @@ func NewVector(value []float64) *Vector {
 	}
 }
 
+func EmptyVector(size int) *Vector {
+	value := make([]float64, size)
+
+	for i := 0; i < size; i++ {
+		value[i] = 0
+	}
+
+	return NewVector(value)
+}
+
+func Of(v *Vector) *Vector {
+	value := make([]float64, v.Size)
+
+	for i := 0; i < v.Size; i++ {
+		value[i] = v.Value[i]
+	}
+
+	return NewVector(value)
+}
+
 func (v *Vector) ScalarProd(vector *Vector) (float64, error) {
 	if !equalSize(v, vector) {
 		return 0, fmt.Errorf(ErrorDimensions)
