@@ -69,6 +69,21 @@ func (m *Matrix) MulVector(v *vector.Vector) (*vector.Vector, error) {
 	return vector.NewVector(res), nil
 }
 
+func (m *Matrix) MulScalar(s float64) *Matrix {
+	value := make([][]float64, m.RowCount)
+
+	for i := 0; i < m.RowCount; i++ {
+		value[i] = make([]float64, m.ColumnCount)
+
+		for j := 0; j < m.ColumnCount; j++ {
+			value[i][j] = m.Value[i][j] * s
+		}
+	}
+
+	newM, _ := NewMatrix(value)
+	return newM
+}
+
 func (m *Matrix) Sum(matrix *Matrix) (*Matrix, error) {
 	if m.RowCount != matrix.RowCount || m.ColumnCount != matrix.ColumnCount {
 		return nil, fmt.Errorf(ErrorDimensions)
@@ -85,6 +100,10 @@ func (m *Matrix) Sum(matrix *Matrix) (*Matrix, error) {
 	}
 
 	return NewMatrix(res)
+}
+
+func (m *Matrix) Sub(matrix *Matrix) (*Matrix, error) {
+	return m.Sum(matrix.MulScalar(-1))
 }
 
 func (m *Matrix) Inverse2() (*Matrix, error) {
@@ -147,6 +166,25 @@ func (m *Matrix) IsTriangle() bool {
 			if m.Value[i][j] != 0 {
 				return false
 			}
+		}
+	}
+
+	return true
+}
+
+func (m *Matrix) IsDominance() bool {
+	for i := 0; i < m.RowCount; i++ {
+		diag := math.Abs(m.Value[i][i])
+		sum := float64(0)
+
+		for j := 0; j < m.ColumnCount; j++ {
+			if i != j {
+				sum += math.Abs(m.Value[i][j])
+			}
+		}
+
+		if diag <= sum {
+			return false
 		}
 	}
 
