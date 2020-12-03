@@ -25,6 +25,21 @@ func NewMatrix(value [][]float64) (*Matrix, error) {
 	}, nil
 }
 
+func IdentityMatrix(rowCount, columnCount int) *Matrix {
+	value := make([][]float64, rowCount)
+
+	for i := 0; i < rowCount; i++ {
+		value[i] = make([]float64, columnCount)
+		for j := 0; j < columnCount; j++ {
+			value[i][j] = 0
+		}
+		value[i][i] = 1
+	}
+
+	matrix, _ := NewMatrix(value)
+	return matrix
+}
+
 func (m *Matrix) MulMatrix(secondMatrix *Matrix) (*Matrix, error) {
 	if m.ColumnCount != secondMatrix.RowCount {
 		return nil, fmt.Errorf(ErrorMulMatricesSize)
@@ -191,6 +206,34 @@ func (m *Matrix) IsDominance() bool {
 	return true
 }
 
+func (m *Matrix) IsSymmetric() (bool, error) {
+	if m.RowCount != m.ColumnCount {
+		return false, fmt.Errorf(ErrorSquareMatrix)
+	}
+
+	for i := 0; i < m.RowCount; i++ {
+		for j := 0; j < m.ColumnCount; j++ {
+			if m.Value[i][j] != m.Value[j][i] {
+				return false, nil
+			}
+		}
+	}
+
+	return true, nil
+}
+
+func (m *Matrix) IsPositive() bool {
+	for i := 0; i < m.RowCount; i++ {
+		for j := 0; j < m.ColumnCount; j++ {
+			if m.Value[i][j] <= 0 {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 func (m *Matrix) SwapColumns(i, j int) error {
 	if i < 0 || j < 0 || i >= m.ColumnCount || j >= m.ColumnCount {
 		return fmt.Errorf(ErrorSwapIndexOutOfRange)
@@ -226,6 +269,18 @@ func (m *Matrix) Copy() *Matrix {
 	newMatrix, _ := NewMatrix(rows)
 
 	return newMatrix
+}
+
+func (m *Matrix) Flat() []float64 {
+	res := make([]float64, m.RowCount*m.ColumnCount)
+
+	for i := 0; i < m.RowCount; i++ {
+		for j := 0; j < m.ColumnCount; j++ {
+			res[i*m.ColumnCount+j] = m.Value[i][j]
+		}
+	}
+
+	return res
 }
 
 func (m *Matrix) String() string {

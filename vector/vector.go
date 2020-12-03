@@ -66,6 +66,16 @@ func (v *Vector) Sum(vector *Vector) (*Vector, error) {
 	return NewVector(value), nil
 }
 
+func (v *Vector) MulScalar(x float64) *Vector {
+	value := make([]float64, v.Size)
+
+	for i := range value {
+		value[i] = v.Value[i] * x
+	}
+
+	return NewVector(value)
+}
+
 func (v *Vector) UniformNorm() float64 {
 	norm := math.Abs(v.Value[0])
 
