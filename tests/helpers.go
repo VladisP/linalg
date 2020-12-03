@@ -33,6 +33,25 @@ func fillDominanceMatrix(n int) (*matrix.Matrix, error) {
 	return m, nil
 }
 
+func fillOPMatrix(n int) (*matrix.Matrix, error) {
+	m, err := fillRandomMatrix(n)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := 0; i < m.RowCount; i++ {
+		for j := 0; j < i; j++ {
+			m.Value[i][j] = m.Value[j][i]
+		}
+	}
+
+	for i := 0; i < m.RowCount; i++ {
+		m.Value[i][i] = sum(m.Value[i]) * 2
+	}
+
+	return m, nil
+}
+
 func sum(s []float64) float64 {
 	sum := float64(0)
 
