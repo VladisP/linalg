@@ -30,7 +30,7 @@ func TestRK(t *testing.T) {
 	expect := ((deltaF.UniformNorm() / f.UniformNorm()) + (deltaA.UniformNorm() / a.UniformNorm())) * condNum
 	fmt.Printf("Expect: %.15f\n", expect)
 
-	aPlusDelta, _ := a.Sum(deltaA)
+	aPlusDelta := a.Sum(deltaA)
 	fPlusDelta, _ := f.Sum(deltaF)
 
 	sol2, _ := gauss.ClassicGauss(aPlusDelta, fPlusDelta)

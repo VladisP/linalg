@@ -13,7 +13,7 @@ func OneParameter(a *matrix.Matrix, f *vector.Vector, tau float64) (*vector.Vect
 	}
 
 	id := matrix.IdentityMatrix(a.RowCount, a.ColumnCount)
-	p, _ := id.Sub(a.MulScalar(tau))
+	p := id.Sub(a.MulScalar(tau))
 	g := f.MulScalar(tau)
 	x := vector.EmptyVector(f.Size)
 	xNext := vector.EmptyVector(f.Size)
