@@ -6,6 +6,5 @@ const (
 	ErrorMulVectorDimension  = "incorrect vector dimension"
 	ErrorSwapIndexOutOfRange = "swap index out of matrix range"
 	ErrorMatrix2by2          = "the method is applicable only to 2-by-2 matrices"
-	ErrorDimensions          = "the dimensions of the matrices must match"
 	ErrorSquareMatrix        = "matrix must be square"
 )

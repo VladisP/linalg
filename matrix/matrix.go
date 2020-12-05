@@ -99,9 +99,9 @@ func (m *Matrix) MulScalar(s float64) *Matrix {
 	return newM
 }
 
-func (m *Matrix) Sum(matrix *Matrix) (*Matrix, error) {
+func (m *Matrix) Sum(matrix *Matrix) *Matrix {
 	if m.RowCount != matrix.RowCount || m.ColumnCount != matrix.ColumnCount {
-		return nil, fmt.Errorf(ErrorDimensions)
+		return nil
 	}
 
 	res := make([][]float64, m.RowCount)
@@ -114,11 +114,27 @@ func (m *Matrix) Sum(matrix *Matrix) (*Matrix, error) {
 		}
 	}
 
-	return NewMatrix(res)
+	newMatrix, _ := NewMatrix(res)
+	return newMatrix
 }
 
-func (m *Matrix) Sub(matrix *Matrix) (*Matrix, error) {
-	return m.Sum(matrix.MulScalar(-1))
+func (m *Matrix) Sub(matrix *Matrix) *Matrix {
+	if m.RowCount != matrix.RowCount || m.ColumnCount != matrix.ColumnCount {
+		return nil
+	}
+
+	res := make([][]float64, m.RowCount)
+
+	for i := 0; i < m.RowCount; i++ {
+		res[i] = make([]float64, m.ColumnCount)
+
+		for j := 0; j < m.ColumnCount; j++ {
+			res[i][j] = m.Value[i][j] - matrix.Value[i][j]
+		}
+	}
+
+	newMatrix, _ := NewMatrix(res)
+	return newMatrix
 }
 
 func (m *Matrix) Inverse2() (*Matrix, error) {
