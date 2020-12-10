@@ -299,6 +299,22 @@ func (m *Matrix) Flat() []float64 {
 	return res
 }
 
+func (m *Matrix) Transpose() *Matrix {
+	res := make([][]float64, m.ColumnCount)
+	for j := 0; j < m.ColumnCount; j++ {
+		res[j] = make([]float64, m.RowCount)
+	}
+
+	for i := 0; i < m.RowCount; i++ {
+		for j := 0; j < m.ColumnCount; j++ {
+			res[j][i] = m.Value[i][j]
+		}
+	}
+
+	newMatrix, _ := NewMatrix(res)
+	return newMatrix
+}
+
 func (m *Matrix) String() string {
 	s := ""
 
