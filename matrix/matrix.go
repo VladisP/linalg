@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"fmt"
+	"gonum.org/v1/gonum/mat"
 	"linalg/vector"
 	"math"
 	"strconv"
@@ -38,6 +39,21 @@ func IdentityMatrix(rowCount, columnCount int) *Matrix {
 
 	matrix, _ := NewMatrix(value)
 	return matrix
+}
+
+func FromColumns(columns []*vector.Vector) *Matrix {
+	value := make([][]float64, columns[0].Size)
+
+	for i := 0; i < columns[0].Size; i++ {
+		value[i] = make([]float64, len(columns))
+
+		for j := 0; j < len(columns); j++ {
+			value[i][j] = columns[j].Value[i]
+		}
+	}
+
+	newMatrix, _ := NewMatrix(value)
+	return newMatrix
 }
 
 func (m *Matrix) MulMatrix(secondMatrix *Matrix) (*Matrix, error) {
@@ -315,6 +331,22 @@ func (m *Matrix) Transpose() *Matrix {
 	return newMatrix
 }
 
+func (m *Matrix) GetColumns() []*vector.Vector {
+	res := make([]*vector.Vector, 0, m.ColumnCount)
+
+	for j := 0; j < m.ColumnCount; j++ {
+		v := make([]float64, m.RowCount)
+
+		for i := 0; i < m.RowCount; i++ {
+			v[i] = m.Value[i][j]
+		}
+
+		res = append(res, vector.NewVector(v))
+	}
+
+	return res
+}
+
 func (m *Matrix) String() string {
 	s := ""
 
@@ -334,4 +366,17 @@ func (m *Matrix) String() string {
 	}
 
 	return s
+}
+
+// methods for gonum
+func (m Matrix) Dims() (r, c int) {
+	return m.RowCount, m.ColumnCount
+}
+
+func (m Matrix) At(i, j int) float64 {
+	return m.Value[i][j]
+}
+
+func (m Matrix) T() mat.Matrix {
+	return *m.Transpose()
 }
